@@ -12,19 +12,6 @@ ShoppingList.RemoveItem = function() {
 	$('.items').on('click', '.remove', function(event) {
 
 		$(this).parent().remove();
-		// array = ShoppingList.getCurrentList()
-		//ShoppingList.GetStoredList().length > 1 ? ShoppingList.GetStoredList().split(',') : ShoppingList.GetStoredList();
-
-		//turn nodelist into array
-		// array = Array.prototype.slice.call( array, 0 );
-		// var listItemIndex = array.indexOf($(this).siblings('span').text());
-		// console.log($(this).parent().text(), listItemIndex);
-
-		
-		// if( listItemIndex !== -1 && array.splice(listItemIndex, 1).toString() !== 'undefined' ) {
-			// ShoppingList.SetList(array.splice(listItemIndex, 1));
-		// }
-		// ShoppingList.SetList(array);
 		ShoppingList.UpdateList()
 	});
 }
