@@ -1,0 +1,15 @@
+body {
+	text-align: center;
+}
+.shopping-list {
+	margin: 0 auto;
+	padding: 100px;
+}
+
+.remove:after {
+	display: inline-block;
+	height: 1em;
+	width: 1em;
+	border: 1px solid blue;
+	content:"X";
+}
