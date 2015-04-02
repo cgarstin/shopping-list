@@ -20,15 +20,14 @@ ShoppingList.UpdateList = function() {
 	var array = [];
 	$('.items li span').each(function(){
 		array.push($(this).text());
-		console.info(array);
 	});
-	ShoppingList.SetList(array);
+	ShoppingList.SetList(array.reverse());
 }
 
 ShoppingList.SubmitValue = function() {
 	$('.shopping-list').on('submit', function(){
 
-		var currentList = ShoppingList.GetStoredList();//JSON.parse(ShoppingList.GetStoredList());
+		var currentList = ShoppingList.GetStoredList();
 		var	newItem = $('.new-item').val();
 		ShoppingList.SetList(currentList, newItem);
 		return false;
@@ -37,8 +36,8 @@ ShoppingList.SubmitValue = function() {
 
 
 ShoppingList.ChangeItem = function() {
-	$('.items').on('change', 'li', function() {
-		
+	$('.items').on('blur', 'li', function() {
+		ShoppingList.UpdateList();
 	});
 }
 
@@ -48,19 +47,25 @@ ShoppingList.GetStoredList = function() {
 }
 
 ShoppingList.SetList = function(shoppingList, newItem) {
+	if(shoppingList === 'init') {
+		return false;
+	}
 	var newList = newItem;
+
 	var updateStoredList = function() {
-		console.log('oops');
 		localStorage.setItem('Shopping List', newList);
 		ShoppingList.BuildList(newList);
 	}
-	if( shoppingList === null || ( shoppingList === undefined && shoppingList === 'undefined') {
+	if( shoppingList === null || ( shoppingList === undefined && shoppingList === 'undefined') ) {
 		newList = newItem;
 		updateStoredList();
-	} else if (typeof newItem === 'undefined') {
+	} else if (typeof newItem === 'undefined' && ( shoppingList.constructor === Array && shoppingList.length > 0 ) ) {
 		newList = shoppingList;
 		updateStoredList();
-	} else if ( newItem !== 'undefined' && ( shoppingList !== null || ( shoppingList === undefined && shoppingList === 'undefined') )) {
+	} else if ( ( typeof newItem !== undefined && newItem !== 'undefined' )
+							&& ( shoppingList !== null || ( shoppingList === undefined && shoppingList === 'undefined'))
+							&& ( (shoppingList.constructor === Array && shoppingList.length > 0) || shoppingList.toString().length >0 )
+						) {
 		newList = shoppingList + ',' + newItem;
 		updateStoredList();
 	}
@@ -81,7 +86,7 @@ $(function(){
 	ShoppingList.submitValue = new ShoppingList.SubmitValue();
 	ShoppingList.getStoredList = new ShoppingList.GetStoredList();
 	ShoppingList.changeItem = new ShoppingList.ChangeItem();
-	ShoppingList.setList = new ShoppingList.SetList();
+	ShoppingList.setList = new ShoppingList.SetList('init');
 	ShoppingList.buildList = new ShoppingList.BuildList();
 	ShoppingList.removeItem = new ShoppingList.RemoveItem();
 });
